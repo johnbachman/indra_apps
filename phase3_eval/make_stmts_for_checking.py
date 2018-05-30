@@ -105,8 +105,8 @@ def run(dec_thresh=0.5, inc_thresh=1.5):
 
     # If filtering is to be done based on thresholds only,
     # set this to None
-    drug_ab_combs = get_eval_drug_ab_combs(data)
-    #drug_ab_combs = None
+    #drug_ab_combs = get_eval_drug_ab_combs(data)
+    drug_ab_combs = None
 
     stmts, values = make_stmts(data, ab_agents, drug_ab_combs=drug_ab_combs,
                                thresh=[dec_thresh, inc_thresh])
