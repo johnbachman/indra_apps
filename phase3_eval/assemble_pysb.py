@@ -51,7 +51,7 @@ def assemble_pysb(stmts, data_genes, out_file):
     # Add observables
     add_observables(pa.model)
     pa.save_model(out_file)
-    with open('korkut_pysb.pkl', 'wb') as fh:
+    with open('output/korkut_pysb_model.pkl', 'wb') as fh:
         pickle.dump(pa.model, fh)
     #pa.export_model('kappa', '%s.ka' % base_file)
     return pa.model
