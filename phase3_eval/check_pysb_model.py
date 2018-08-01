@@ -11,6 +11,8 @@ import process_data
 import make_stmts_for_checking as make_stmts
 from assemble_pysb import set_context, add_observables
 
+from indra.statements import Dephosphorylation
+
 def get_path_stmts(results, model, stmts):
     all_path_stmts = []
     for drug, target, polarity, value, found_path, paths, flag in results:
@@ -150,7 +152,7 @@ if __name__ == '__main__':
     ab_map = process_data.get_antibody_map(data)
 
     print('Loading data statements.')
-    data_stmts, data_values = make_stmts.run(dec_thresh=0.5, inc_thresh=1.5)
+    data_stmts, data_values = make_stmts.run(dec_thresh=0.8, inc_thresh=1.2)
     all_data_stmts = [values.values() for values in data_stmts.values()]
     all_data_stmts = itertools.chain.from_iterable(all_data_stmts)
     all_data_stmts = list(itertools.chain.from_iterable(all_data_stmts))
@@ -191,15 +193,15 @@ if __name__ == '__main__':
         pickle.dump(pa.model, f)
     """
 
-    with open('korkut_pysb.pkl', 'rb') as f:
+    with open('output/korkut_pysb_model.pkl', 'rb') as f:
         print("Unpickling PySB model")
         model = pickle.load(f)
+    stmts = base_stmts
 
     # Some parameters up front
-    MAX_PATHS_ONE = 5
-    MAX_PATHS_ALL = 5
+    MAX_PATHS_ONE = 0
+    MAX_PATHS_ALL = 0
     MAX_PATH_LENGTH = 6
-
 
     # Preprocess and assemble the pysb model
     #model = assemble_pysb(combined_stmts, data_genes, '')
@@ -207,7 +209,6 @@ if __name__ == '__main__':
     if rerun:
         mc = ModelChecker(model, all_data_stmts, agent_obs)
         mc.prune_influence_map()
-
         # Iterate over each drug/ab statement subset
         results = []
         for drug_name, ab_dict in data_stmts.items():
@@ -262,5 +263,5 @@ if __name__ == '__main__':
     path_stmts = get_path_stmts(results, model, base_stmts)
     path_genes = get_path_genes(path_stmts)
     #make_english_output(results, model, base_stmts)
-    make_cyjs_network(results, model, base_stmts)
+    #make_cyjs_network(results, model, base_stmts)
     paths_json = export_json(results, model, base_stmts)

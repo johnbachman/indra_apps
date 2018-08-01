@@ -58,8 +58,8 @@ def assemble_pysb(stmts, data_genes, out_file):
 
 def preprocess_stmts(stmts, data_genes):
     # Filter the INDRA Statements to be put into the model
-    stmts = ac.filter_mutation_status(stmts,
-                                      {'BRAF': [('V', '600', 'E')]}, ['PTEN'])
+    #stmts = ac.filter_mutation_status(stmts,
+    #                                  {'BRAF': [('V', '600', 'E')]}, ['PTEN'])
     stmts = ac.filter_by_type(stmts, Complex, invert=True)
     stmts = ac.filter_direct(stmts)
     stmts = ac.filter_belief(stmts, 0.95)
@@ -101,9 +101,9 @@ def preprocess_stmts(stmts, data_genes):
 def set_context(pa):
     pa.set_context('SKMEL28_SKIN')
     # Set BRAF V600E
-    for ic in pa.model.initial_conditions:
-        if str(ic[0]).startswith('BRAF'):
-            ic[0].monomer_patterns[0].site_conditions['V600'] = 'E'
+    #for ic in pa.model.initial_conditions:
+    #    if str(ic[0]).startswith('BRAF'):
+    #        ic[0].monomer_patterns[0].site_conditions['V600'] = 'E'
 
 
 def generate_equations(model, pkl_cache):

@@ -10,6 +10,7 @@ import process_data, process_r3, process_sparser, process_trips
 import read_phosphosite
 from assemble_sif import assemble_sif
 from assemble_cx import assemble_cx
+from assemble_nx import assemble_nx
 from assemble_pysb import assemble_pysb
 from assemble_pybel import assemble_pybel
 
@@ -26,7 +27,8 @@ def read_extra_sources(out_file):
     r3_stmts = process_r3.read_stmts(process_r3.active_forms_files[0])
     trips_stmts = process_trips.read_stmts(process_trips.base_folder)
     phosphosite_stmts = \
-        read_phosphosite.read_phosphosite_owl(read_phosphosite.phosphosite_owl_file)
+        read_phosphosite.read_phosphosite_owl(
+                                       read_phosphosite.phosphosite_owl_file)
     stmts = trips_stmts + sparser_stmts + r3_stmts + phosphosite_stmts
     ac.dump_statements(stmts, out_file)
     return stmts
@@ -56,7 +58,12 @@ if __name__ == '__main__':
     data_genes = process_data.get_all_gene_names(data)
     reassemble = False
     if not reassemble:
-        stmts = ac.load_statements(pjoin(outf, 'preassembled.pkl'))
+        #stmts = ac.load_statements(pjoin(outf, 'preassembled.pkl'))
+        stmts = ac.load_statements('output/bioexp_db_only_reduce_mods.pkl')
+        #stmts = ac.load_statements('output/bioexp_reading_only_reduce_mods.pkl')
+        #stmts = ac.load_statements(
+        #                'output/bioexp_reading_only_filter_gene_list.pkl')
+        #stmts = ac.load_statements('output/bioexp_reduce_mods.pkl')
     else:
         #prior_stmts = build_prior(data_genes, pjoin(outf, 'prior.pkl'))
         prior_stmts = ac.load_statements(pjoin(outf, 'prior.pkl'))
@@ -68,7 +75,7 @@ if __name__ == '__main__':
         extra_stmts = read_extra_sources(pjoin(outf, 'extra_stmts.pkl'))
         reading_stmts = reach_stmts + extra_stmts
         reading_stmts = ac.map_grounding(reading_stmts,
-                                        save=pjoin(outf, 'gmapped_reading.pkl'))
+                                       save=pjoin(outf, 'gmapped_reading.pkl'))
         stmts = prior_stmts + reading_stmts + extra_stmts
 
         stmts = ac.filter_grounded_only(stmts)
@@ -101,6 +108,11 @@ if __name__ == '__main__':
     if 'cx' in assemble_models:
         for network_type in ('high_belief', 'direct'):
             cxa = assemble_cx(stmts, pjoin(outf, 'korkut_full'), network_type)
+
+    if 'nx' in assemble_models:
+        network_type = 'direct'
+        stmts = ac.filter_gene_list(stmts, data_genes, 'all')
+        ga = assemble_nx(stmts, pjoin(outf, 'korkut_full_nx'), network_type)
 
     ### PyBEL assembly
     if 'pybel' in assemble_models:
