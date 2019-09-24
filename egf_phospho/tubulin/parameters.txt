@@ -1,0 +1,13 @@
+proteomics-values-file = tubulin_phosphosites.tsv
+id-column = idcol
+symbols-column = symcol
+sites-column = sitescol
+effect-column = effectcol
+control-value-column = DIV 14 EpoB 0 (stabilizer 1)
+control-value-column = DIV 14 Fiji 0 (stabilizer 2)
+test-value-column = DIV 14 EpoB 60 min (stabilizer 1)
+value-transformation = fold-change-of-mean
+built-in-network-resource-selection = PC
+relation-filter-type = phospho-only
+default-missing-value = 10
+threshold-for-data-significance = 2 phosphoprotein
