@@ -1,3 +1,3 @@
-java -jar $CAUSALPATH/causalpath.jar .
+java -jar "$CAUSALPATH/causalpath.jar" .
 
 

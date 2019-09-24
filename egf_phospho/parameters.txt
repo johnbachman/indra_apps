@@ -12,5 +12,5 @@ test-value-column = default_130n_sn_sum
 value-transformation = fold-change-of-mean
 built-in-network-resource-selection = PC
 relation-filter-type = phospho-only
-default-missing-value = 400
+default-missing-value = 50
 threshold-for-data-significance = 2 phosphoprotein
